@@ -2,7 +2,9 @@
 title: "A/B Testing"
 author: "Nazmul"
 date: "`r Sys.Date()`"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -43,7 +45,7 @@ library(bayesAB)
 dt <- read.csv("WA_Marketing-Campaign.csv")
 ```
 
-## EDA  
+### EDA  
 
 ```{r}
 summary(dt)  
@@ -61,6 +63,7 @@ As we can see from this chart, the promotion group 3 has the largest aggregate s
 
 ```{r}
 #grouping data by Promotion
+png(filename="prom_vs_perct.png", res=500, width=3312, height=1600)
 prom <- dt %>%
   group_by(Promotion) %>%
   summarize(Sales=sum(SalesInThousands))%>%
@@ -78,6 +81,8 @@ panel.grid = element_blank())
 
 
 ```{r}
+png(filename="marsize.png", res=500, width=3312, height=1600)
+
 msize <- dt %>%
   group_by(Promotion, MarketSize) %>%
   summarize(count= n()) 
@@ -126,9 +131,13 @@ pm12
 summary(pm12)
 ```
 
+
 ```{r}
 plot(pm12)
 ```
+
+
+
 
 
 ```{r}
@@ -149,13 +158,7 @@ plot(pm13)
 
 
 
-```{r}
-pm23 <- bayesTest(prom_2, prom_3, 
-          priors = c('mu' = 5, 'lambda' = 1, 'alpha' = 3, 'beta' = 1),
-                 distribution = 'normal')
-pm23
 
-```
 Promotion 1 outperform promotion 2, and 3.  
 
 
